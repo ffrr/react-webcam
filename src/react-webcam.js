@@ -14,6 +14,7 @@ export default class Webcam extends Component {
     height: 480,
     muted: false,
     onUserMedia: () => {},
+    onUserMediaFailed: () => {},
     screenshotFormat: 'image/webp',
     width: 640,
   };
@@ -22,6 +23,7 @@ export default class Webcam extends Component {
     audio: PropTypes.bool,
     muted: PropTypes.bool,
     onUserMedia: PropTypes.func,
+    onUserMediaFailed: PropTypes.func,
     height: PropTypes.oneOfType([
       PropTypes.number,
       PropTypes.string,
@@ -183,17 +185,18 @@ export default class Webcam extends Component {
         hasUserMedia: false,
       });
 
+      this.props.onUserMediaFailed();
       return;
     }
     try {
       const src = window.URL.createObjectURL(stream);
-  
+
       this.stream = stream;
       this.setState({
         hasUserMedia: true,
         src,
       });
-  
+
       this.props.onUserMedia();
     } catch(error) {
       this.stream = stream;
